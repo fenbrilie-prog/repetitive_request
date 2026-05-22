@@ -1,0 +1,1133 @@
+<!--
+  ============================================================
+  CHECKBOX · REPETITIVE REQUESTS LANDING PAGE
+  Reference HTML for design review · also Webflow-embed safe
+  ============================================================
+
+  HOW TO USE:
+  Option A — Open this file in a browser to preview the rendered page
+  Option B — Strip the <!DOCTYPE>, <html>, <head>, <body> tags and paste
+             everything else (link tags + style + .cbx-rr div + scripts) into
+             a Webflow Embed block, OR
+  Option C — Build the page natively in Webflow using BUILD_SPEC.md, and link
+             the cbx-rr-styles.css from GitHub via Project Settings
+
+  Namespace: .cbx-rr (won't collide with the healthcare page's .cbx-hc)
+  Mobile-first, responsive, no external JS dependencies.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stop Answering the Same Legal Question Twice | Checkbox</title>
+<meta name="description" content="In-house legal teams waste 40% of attorney time on repetitive requests. Checkbox deflects what shouldn't reach legal, and automates what does. Reclaim capacity.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     NAMESPACE RESET + TOKENS — all scoped to .cbx-rr
+     ========================================================== */
+  .cbx-rr, .cbx-rr *, .cbx-rr *::before, .cbx-rr *::after { box-sizing: border-box; }
+
+  .cbx-rr {
+    /* Brand */
+    --cbx-green: #11D281;
+    --cbx-green-dark: #0BB870;
+    --cbx-green-soft: #DCFAEC;
+    /* Ink */
+    --cbx-ink: #0E0E0E;
+    --cbx-ink-soft: #2A2A2A;
+    --cbx-muted: #6A6A6A;
+    --cbx-muted-2: #8A8A95;
+    /* Lines + surfaces */
+    --cbx-line: #E6E6EE;
+    --cbx-line-soft: #EFECF7;
+    --cbx-bg: #FFFFFF;
+    --cbx-bg-soft: #F8F6FF;
+    /* Hero gradient (matches healthcare page) */
+    --cbx-hero-grad: linear-gradient(135deg, #EAF4FF 0%, #EFE8FF 45%, #FBE8F2 80%, #FFEEDB 100%);
+    /* Dark */
+    --cbx-ink-deep: #0B0B0F;
+    /* Semantic */
+    --cbx-risk: #D9456A;
+    --cbx-risk-soft: #FFE6EE;
+    --cbx-warn: #E5A93B;
+    --cbx-warn-soft: #FFF6E5;
+    --cbx-info: #4B7BE5;
+    --cbx-info-soft: #E6EEFF;
+    --cbx-purple: #6B4BFF;
+    --cbx-purple-soft: #EFE6FF;
+    /* Radius */
+    --cbx-r-sm: 8px;
+    --cbx-r-md: 12px;
+    --cbx-r-lg: 16px;
+    --cbx-r-xl: 20px;
+    /* Shadow */
+    --cbx-sh-xs: 0 1px 2px rgba(14,14,14,0.04);
+    --cbx-sh-sm: 0 4px 12px rgba(14,14,14,0.04);
+    --cbx-sh-md: 0 8px 24px rgba(14,14,14,0.05);
+    --cbx-sh-lg: 0 22px 60px rgba(14,14,14,0.10);
+    --cbx-sh-xl: 0 30px 80px rgba(14,14,14,0.18);
+    /* 8px scale */
+    --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px;
+    --s5: 40px; --s6: 48px; --s8: 64px; --s10: 80px; --s12: 96px;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--cbx-ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .cbx-rr h1, .cbx-rr h2, .cbx-rr h3, .cbx-rr h4, .cbx-rr h5, .cbx-rr h6,
+  .cbx-rr p, .cbx-rr ul, .cbx-rr ol, .cbx-rr li, .cbx-rr blockquote { margin: 0; padding: 0; }
+  .cbx-rr ul { list-style: none; }
+  .cbx-rr a { color: inherit; text-decoration: none; }
+  .cbx-rr button { font: inherit; }
+
+  /* ─── Containers + sections ─────────────────────────────── */
+  .cbx-rr__container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 var(--s3);
+    width: 100%;
+  }
+  .cbx-rr__section {
+    padding: var(--s8) 0;
+    background: var(--cbx-bg);
+  }
+  .cbx-rr__section--alt { background: var(--cbx-bg-soft); }
+  .cbx-rr__section--dark { background: var(--cbx-ink-deep); color: white; }
+  .cbx-rr__section--final { background: var(--cbx-hero-grad); }
+
+  /* ─── Typography ───────────────────────────────────────── */
+  .cbx-rr__h1 {
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--cbx-ink);
+  }
+  .cbx-rr__h2 {
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    font-weight: 600;
+  }
+  .cbx-rr__h3 {
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .cbx-rr__h4 {
+    font-size: 17px;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .cbx-rr__hl {
+    color: var(--cbx-green-dark);
+    background: linear-gradient(180deg, transparent 65%, var(--cbx-green-soft) 65%);
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+  .cbx-rr__lede {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cbx-ink-soft);
+  }
+  .cbx-rr__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--cbx-muted);
+  }
+  /* Used for section intro paragraphs under H2s — bigger and more readable than card body */
+  .cbx-rr__section-lede {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cbx-ink-soft);
+  }
+
+  .cbx-rr__section-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto var(--s5);
+  }
+  .cbx-rr__section-head .cbx-rr__eyebrow { margin-bottom: var(--s2); }
+  .cbx-rr__section-head .cbx-rr__h2 { margin-bottom: var(--s2); }
+  .cbx-rr__section--dark .cbx-rr__h2 { color: white; }
+  .cbx-rr__section--dark .cbx-rr__body { color: rgba(255,255,255,0.7); }
+  .cbx-rr__section--dark .cbx-rr__section-lede { color: rgba(255,255,255,0.7); }
+  .cbx-rr__section--dark .cbx-rr__eyebrow {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+    color: var(--cbx-green);
+  }
+
+  /* ─── Eyebrow pill ─────────────────────────────────────── */
+  .cbx-rr__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+    background: white;
+    border: 1px solid var(--cbx-line);
+    color: var(--cbx-green-dark);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+    border-radius: 999px;
+    line-height: 1;
+  }
+  .cbx-rr__eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cbx-green);
+    box-shadow: 0 0 0 3px var(--cbx-green-soft);
+    display: inline-block;
+  }
+
+  /* ─── Buttons ─────────────────────────────────────────── */
+  .cbx-rr__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s1);
+    border: 1.5px solid transparent;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 22px;
+    border-radius: var(--cbx-r-sm);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-align: center;
+    line-height: 1.2;
+    width: 100%;
+  }
+  .cbx-rr__btn:hover { transform: translateY(-1px); box-shadow: var(--cbx-sh-sm); }
+  .cbx-rr__btn--green { background: var(--cbx-green); color: var(--cbx-ink); border-color: var(--cbx-green); }
+  .cbx-rr__btn--outline { background: transparent; color: var(--cbx-ink); border-color: var(--cbx-ink); }
+  .cbx-rr__cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s1);
+    width: 100%;
+  }
+
+  /* ─── HERO ─────────────────────────────────────────────── */
+  .cbx-rr__hero {
+    background: var(--cbx-hero-grad);
+    padding-top: var(--s6);
+    padding-bottom: var(--s8);
+    overflow: hidden;
+  }
+  .cbx-rr__hero-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s6);
+  }
+  .cbx-rr__hero-copy .cbx-rr__eyebrow { margin-bottom: var(--s3); }
+  .cbx-rr__hero-copy .cbx-rr__h1 { margin-bottom: var(--s3); }
+  .cbx-rr__hero-subhead {
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--cbx-ink-soft);
+    margin-bottom: var(--s4);
+    letter-spacing: -0.01em;
+  }
+  .cbx-rr__hero-lede {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--cbx-ink-soft);
+    max-width: 580px;
+    margin-bottom: 30px !important;
+    margin-top:30px !important;
+  }
+  .cbx-rr__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s2);
+    margin-top: var(--s3);
+    font-size: 12px;
+    color: var(--cbx-ink-soft);
+  }
+  .cbx-rr__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+
+  /* ─── Hero visual: Inbox Comparison Card ─────────────── */
+  .cbx-rr__inbox-card {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-lg);
+    box-shadow: var(--cbx-sh-lg);
+    overflow: hidden;
+  }
+  .cbx-rr__inbox-half { padding: 20px 20px; }
+  .cbx-rr__inbox-half--top {
+    background: var(--cbx-risk-soft);
+    border-bottom: 1px solid var(--cbx-line);
+  }
+  .cbx-rr__inbox-half--bottom { background: var(--cbx-green-soft); }
+  .cbx-rr__inbox-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  .cbx-rr__inbox-half--top .cbx-rr__inbox-label { color: var(--cbx-risk); }
+  .cbx-rr__inbox-half--bottom .cbx-rr__inbox-label { color: var(--cbx-green-dark); }
+  .cbx-rr__inbox-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-sm);
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .cbx-rr__inbox-row:last-child { margin-bottom: 0; }
+  .cbx-rr__inbox-row-text {
+    flex: 1;
+    color: var(--cbx-ink-soft);
+    font-weight: 500;
+  }
+  .cbx-rr__inbox-row-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .cbx-rr__inbox-row-badge--risk { background: var(--cbx-risk-soft); color: var(--cbx-risk); }
+  .cbx-rr__inbox-row-badge--green { background: var(--cbx-green-soft); color: var(--cbx-green-dark); }
+
+  /* ─── Cost cards ──────────────────────────────────────── */
+  .cbx-rr__costs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+  .cbx-rr__cost-card {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-md);
+    box-shadow: var(--cbx-sh-xs);
+    padding: var(--s3);
+  }
+  .cbx-rr__cost-label {
+    font-size: 11px;
+    color: var(--cbx-risk);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cbx-rr__cost-ico {
+    width: 22px; height: 22px;
+    background: var(--cbx-risk-soft);
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cbx-rr__cost-card .cbx-rr__h4 { margin-bottom: 6px; }
+
+  /* ─── Thesis block (Section 3) ──────────────────────── */
+  .cbx-rr__thesis {
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .cbx-rr__thesis-h2 {
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    margin-bottom: var(--s3);
+  }
+  .cbx-rr__thesis p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--cbx-ink-soft);
+    margin-bottom: var(--s3);
+  }
+  .cbx-rr__thesis p:last-of-type { margin-bottom: 0; }
+
+  .cbx-rr__triad {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s1);
+    margin-top: var(--s4);
+  }
+  .cbx-rr__triad-pill {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-md);
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .cbx-rr__triad-pill--feat {
+    background: var(--cbx-green-soft);
+    border-color: var(--cbx-green);
+    box-shadow: 0 8px 24px rgba(17,210,129,0.15);
+  }
+  .cbx-rr__triad-pill-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cbx-muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .cbx-rr__triad-pill-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cbx-ink);
+  }
+  .cbx-rr__triad-pill--feat .cbx-rr__triad-pill-label,
+  .cbx-rr__triad-pill--feat .cbx-rr__triad-pill-text { color: var(--cbx-green-dark); }
+
+  /* ─── Solution cards ───────────────────────────────── */
+  .cbx-rr__solution-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+  .cbx-rr__solution-card {
+    background: white;
+    border: 1.5px solid var(--cbx-green);
+    border-radius: var(--cbx-r-lg);
+    padding: var(--s5);
+    box-shadow: 0 8px 24px rgba(17,210,129,0.08);
+  }
+  .cbx-rr__solution-label {
+    font-size: 11px;
+    color: var(--cbx-green-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: var(--s2);
+  }
+  .cbx-rr__solution-h3 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--s1);
+  }
+  .cbx-rr__solution-card .cbx-rr__solution-sub {
+    font-size: 15px;
+    color: var(--cbx-muted);
+    margin-bottom: var(--s4);
+    line-height: 1.5;
+  }
+  .cbx-rr__solution-card .cbx-rr__solution-body {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--cbx-ink-soft);
+    margin-bottom: var(--s4);
+  }
+  .cbx-rr__solution-card .cbx-rr__feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    margin-top: 0;
+    padding-top: var(--s3);
+    border-top: 1px dashed var(--cbx-line);
+  }
+  .cbx-rr__feature-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--cbx-ink);
+  }
+  .cbx-rr__check {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: var(--cbx-green);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ─── Request-type cards ───────────────────────────── */
+  .cbx-rr__req-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+  .cbx-rr__req-card {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-md);
+    padding: var(--s3);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cbx-rr__req-ico {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--cbx-green-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .cbx-rr__req-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--cbx-line);
+  }
+  .cbx-rr__req-flow-row {
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .cbx-rr__req-flow-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .cbx-rr__req-flow-label--before { background: var(--cbx-risk-soft); color: var(--cbx-risk); }
+  .cbx-rr__req-flow-label--after { background: var(--cbx-green-soft); color: var(--cbx-green-dark); }
+  .cbx-rr__req-flow-text {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--cbx-ink-soft);
+  }
+
+  /* ─── Stats (dark section) ─────────────────────────── */
+  .cbx-rr__stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s4);
+    margin-top: var(--s5);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cbx-rr__stat { text-align: center; }
+  .cbx-rr__stat-value {
+    font-size: 48px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--cbx-green);
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .cbx-rr__stat-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .cbx-rr__stat-foot {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.5);
+  }
+  .cbx-rr__quote {
+    margin-top: var(--s8);
+    text-align: center;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cbx-rr__quote-text {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: white;
+    margin-bottom: var(--s2);
+    font-style: italic;
+  }
+  .cbx-rr__quote-attr {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ─── Steps (How it works) ─────────────────────────── */
+  .cbx-rr__steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+  .cbx-rr__step {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-md);
+    padding: var(--s3);
+  }
+  .cbx-rr__step--feat {
+    border: 1.5px solid var(--cbx-green);
+    box-shadow: 0 8px 24px rgba(17,210,129,0.10);
+  }
+  .cbx-rr__step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cbx-green);
+    color: var(--cbx-green-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: var(--s2);
+    background: white;
+  }
+  .cbx-rr__step--feat .cbx-rr__step-num {
+    background: var(--cbx-green);
+    color: white;
+  }
+  .cbx-rr__step-arrow { display: none; }
+
+  .cbx-rr__step .cbx-rr__h4 { margin-bottom: var(--s1); }
+  .cbx-rr__step p { font-size: 13.5px; color: var(--cbx-muted); line-height: 1.55; }
+
+  /* ─── FAQ ──────────────────────────────────────────── */
+  .cbx-rr__faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s1);
+  }
+  .cbx-rr__faq {
+    background: white;
+    border: 1px solid var(--cbx-line);
+    border-radius: var(--cbx-r-md);
+    box-shadow: var(--cbx-sh-xs);
+    overflow: hidden;
+  }
+  .cbx-rr__faq summary {
+    padding: var(--s2) var(--s3);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--cbx-ink);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.35;
+    list-style: none;
+  }
+  .cbx-rr__faq summary::-webkit-details-marker { display: none; }
+  .cbx-rr__faq-plus {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--cbx-green-soft);
+    color: var(--cbx-green-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+    line-height: 1;
+  }
+  .cbx-rr__faq[open] .cbx-rr__faq-plus { transform: rotate(45deg); }
+  .cbx-rr__faq-a {
+    padding: 0 var(--s3) var(--s3);
+    font-size: 13.5px;
+    color: var(--cbx-muted);
+    line-height: 1.6;
+  }
+
+  /* ─── Final CTA ─────────────────────────────────────── */
+  .cbx-rr__final { text-align: center; }
+  .cbx-rr__final .cbx-rr__h2 { max-width: 720px; margin: 0 auto var(--s2); }
+  .cbx-rr__final p {
+    max-width: 560px;
+    margin: 0 auto var(--s3);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cbx-ink-soft);
+  }
+  .cbx-rr__final-note {
+    margin-top: var(--s3);
+    font-size: 12px;
+    color: var(--cbx-muted);
+  }
+  .cbx-rr__final-note b { color: var(--cbx-ink); }
+
+  /* ─── Tablet ─────────────────────────────────────────── */
+  @media (min-width: 600px) {
+    .cbx-rr__container { padding: 0 var(--s4); }
+    .cbx-rr__section { padding: var(--s10) 0; }
+    .cbx-rr__h1 { font-size: 44px; }
+    .cbx-rr__h2 { font-size: 34px; }
+    .cbx-rr__hero-subhead { font-size: 26px; }
+    .cbx-rr__hero-lede { font-size: 17px; }
+    .cbx-rr__section-lede { font-size: 17px; }
+    .cbx-rr__thesis-h2 { font-size: 38px; }
+    .cbx-rr__cta-row { flex-direction: row; width: auto; }
+    .cbx-rr__btn { width: auto; }
+    .cbx-rr__costs { grid-template-columns: repeat(3, 1fr); }
+    .cbx-rr__triad { grid-template-columns: repeat(3, 1fr); }
+    .cbx-rr__req-grid { grid-template-columns: 1fr 1fr; }
+    .cbx-rr__faq-grid { grid-template-columns: 1fr 1fr; }
+    .cbx-rr__stats { grid-template-columns: repeat(3, 1fr); }
+    .cbx-rr__steps { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  /* ─── Desktop ───────────────────────────────────────── */
+  @media (min-width: 960px) {
+    .cbx-rr__section { padding: var(--s12) 0; }
+    .cbx-rr__h1 { font-size: 52px; }
+    .cbx-rr__h2 { font-size: 40px; }
+    .cbx-rr__hero-subhead { font-size: 28px; }
+    .cbx-rr__hero-lede { font-size: 18px; }
+    .cbx-rr__thesis-h2 { font-size: 44px; }
+    .cbx-rr__stat-value { font-size: 56px; }
+    .cbx-rr__quote-text { font-size: 24px; }
+
+    .cbx-rr__hero { padding-top: var(--s8); padding-bottom: var(--s10); }
+    .cbx-rr__hero-grid { flex-direction: row; align-items: center; }
+    .cbx-rr__hero-copy { flex: 1.05; }
+    .cbx-rr__hero-visual { flex: 1; max-width: 480px; }
+
+    .cbx-rr__solution-grid { grid-template-columns: 1fr 1fr; gap: var(--s3); }
+    .cbx-rr__req-grid { grid-template-columns: 1fr 1fr 1fr; }
+
+    .cbx-rr__steps {
+      grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      gap: 0;
+    }
+    .cbx-rr__step-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cbx-green);
+    }
+  }
+
+</style>
+
+</head>
+<body>
+
+<div class="cbx-rr">
+
+  <!-- ============ 1) HERO ============ -->
+  <section class="cbx-rr__hero">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__hero-grid">
+
+        <div class="cbx-rr__hero-copy">
+          <span class="cbx-rr__eyebrow">
+            <span class="cbx-rr__eyebrow-dot"></span>
+            The Hidden Tax on In-House Legal
+          </span>
+          <h1 class="cbx-rr__h1">Your team answered the same 5 questions 200 times last quarter.</h1>
+          <p class="cbx-rr__hero-subhead">They shouldn't have answered <span class="cbx-rr__hl">any of them.</span></p>
+          <p class="cbx-rr__hero-lede">NDAs, gift approvals, marketing reviews, vendor questions, policy lookups. Every one steals 20 minutes from the work that actually needs a lawyer.</p>
+
+          <div class="cbx-rr__cta-row">
+            <a href="#book" class="cbx-rr__btn cbx-rr__btn--green">Book a demo →</a>
+            <a href="#how" class="cbx-rr__btn cbx-rr__btn--outline">See how it works</a>
+          </div>
+        </div>
+
+        <!-- Hero visual: Inbox Comparison Card -->
+        <div class="cbx-rr__hero-visual">
+          <div class="cbx-rr__inbox-card">
+
+            <div class="cbx-rr__inbox-half cbx-rr__inbox-half--top">
+              <div class="cbx-rr__inbox-label">The same 5 questions, 200 times</div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can I sign this NDA?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--risk">47× this quarter</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Is this gift OK?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--risk">38× this quarter</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can marketing run this claim?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--risk">31× this quarter</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can we share data with this vendor?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--risk">44× this quarter</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"What's our policy on subpoenas?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--risk">42× this quarter</span>
+              </div>
+            </div>
+
+            <div class="cbx-rr__inbox-half cbx-rr__inbox-half--bottom">
+              <div class="cbx-rr__inbox-label">Deflected or automated with Checkbox</div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can I sign this NDA?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--green">Self-served</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Is this gift OK?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--green">Auto-approved</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can marketing run this claim?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--green">Routed via workflow</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"Can we share data with this vendor?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--green">Self-served</span>
+              </div>
+              <div class="cbx-rr__inbox-row">
+                <span class="cbx-rr__inbox-row-text">"What's our policy on subpoenas?"</span>
+                <span class="cbx-rr__inbox-row-badge cbx-rr__inbox-row-badge--green">AI assistant answered</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2) THE PROBLEM ============ -->
+  <section class="cbx-rr__section">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__section-head">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>The Problem</span>
+        <h2 class="cbx-rr__h2">Every in-house legal team has <span class="cbx-rr__hl">the same hidden problem.</span></h2>
+        <p class="cbx-rr__section-lede">It's not the complex legal work. It's the same five questions arriving from a hundred different people, every quarter. Repetitive requests are the volume your team can't see, can't measure, and can't escape.</p>
+      </div>
+
+      <div class="cbx-rr__costs">
+        <div class="cbx-rr__cost-card">
+          <div class="cbx-rr__cost-label">
+            <span class="cbx-rr__cost-ico">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D9456A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </span>
+            Cost #1
+          </div>
+          <h4 class="cbx-rr__h4">Lawyer time evaporates into 15-minute increments</h4>
+          <p class="cbx-rr__body" style="margin-top: 8px;">A 5-attorney team that answers 200 repetitive questions a quarter loses about 50 hours to context-switching. That's a senior associate's entire month of focus time, gone to questions that didn't need their judgment.</p>
+        </div>
+        <div class="cbx-rr__cost-card">
+          <div class="cbx-rr__cost-label">
+            <span class="cbx-rr__cost-ico">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D9456A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </span>
+            Cost #2
+          </div>
+          <h4 class="cbx-rr__h4">Nobody can see the actual workload</h4>
+          <p class="cbx-rr__body" style="margin-top: 8px;">Without intake, repetitive requests don't show up in metrics. They live in email threads, hallway conversations, and Slack DMs. The GC can't report on the work that's quietly consuming the team's capacity.</p>
+        </div>
+        <div class="cbx-rr__cost-card">
+          <div class="cbx-rr__cost-label">
+            <span class="cbx-rr__cost-ico">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D9456A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </span>
+            Cost #3
+          </div>
+          <h4 class="cbx-rr__h4">The business stops asking, and starts guessing</h4>
+          <p class="cbx-rr__body" style="margin-top: 8px;">When legal feels slow or hard to reach, business owners route around them. Marketing approves its own claim. Sales redlines its own contract. The shortcut creates risk that surfaces months later.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3) THE WRONG FIX ============ -->
+  <section class="cbx-rr__section cbx-rr__section--alt">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__thesis">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>The Wrong Fix</span>
+        <h2 class="cbx-rr__thesis-h2" style="margin-top: var(--s3);">Faster lawyers won't fix this. <br/><span class="cbx-rr__hl">The fix is upstream.</span></h2>
+
+        <p class="cbx-rr__hero-lede">Most legal tech today bets on speed. Faster drafting. Smarter summaries. Better redlines. Useful work, but it has a ceiling. The bottleneck isn't how quickly a lawyer answers a question. The bottleneck is that the question reached a lawyer at all.</p>
+
+        <p class="cbx-rr__hero-lede">The biggest gains in any inbound-heavy team have never come from making the expert faster. They've come from controlling what reaches the expert. The ER learned it with triage. Customer support learned it with deflection. In-house legal is the next discipline that learns it.</p>
+
+        <div class="cbx-rr__triad">
+          <div class="cbx-rr__triad-pill">
+            <div class="cbx-rr__triad-pill-label">Emergency Room</div>
+            <div class="cbx-rr__triad-pill-text">Triage at the door</div>
+          </div>
+          <div class="cbx-rr__triad-pill">
+            <div class="cbx-rr__triad-pill-label">Customer Support</div>
+            <div class="cbx-rr__triad-pill-text">Deflection before the ticket</div>
+          </div>
+          <div class="cbx-rr__triad-pill cbx-rr__triad-pill--feat">
+            <div class="cbx-rr__triad-pill-label">In-House Legal</div>
+            <div class="cbx-rr__triad-pill-text">The Legal Front Door</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4) THE SOLUTION ============ -->
+  <section class="cbx-rr__section" id="how">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__section-head">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>How Checkbox Handles Repetitive Work</span>
+        <h2 class="cbx-rr__h2">Two moves. <span class="cbx-rr__hl">One outcome.</span></h2>
+        <p class="cbx-rr__section-lede">Stop the question from reaching legal when it doesn't need to. Run a workflow that handles the request when it does. Either way, no senior attorney drafts the same NDA from scratch for the 48th time.</p>
+      </div>
+
+      <div class="cbx-rr__solution-grid">
+
+        <div class="cbx-rr__solution-card">
+          <div class="cbx-rr__solution-label">Move 1</div>
+          <h3 class="cbx-rr__solution-h3">Deflect</h3>
+          <p class="cbx-rr__solution-sub">Answer the question before it reaches legal.</p>
+          <p class="cbx-rr__solution-body">An AI legal assistant trained on your policies, playbooks, and prior answers responds to common questions directly in Slack, Teams, or a self-service portal. Standard NDA requests get routed to a template. Policy lookups get answered instantly. Gift threshold questions get a clear yes or no based on your rules. Legal only sees what legal actually needs to see.</p>
+          <ul class="cbx-rr__feature-list">
+            <li><span class="cbx-rr__check">✓</span>AI assistant trained on your policies, deployed in Slack, Teams, and on the web</li>
+            <li><span class="cbx-rr__check">✓</span>Self-service request templates for common scenarios</li>
+            <li><span class="cbx-rr__check">✓</span>Knowledge base that learns from your prior answers</li>
+          </ul>
+        </div>
+
+        <div class="cbx-rr__solution-card">
+          <div class="cbx-rr__solution-label">Move 2</div>
+          <h3 class="cbx-rr__solution-h3">Automate</h3>
+          <p class="cbx-rr__solution-sub">When it has to reach legal, route it through a workflow.</p>
+          <p class="cbx-rr__solution-body">Standardized intake captures the request with the right context attached. Conditional routing sends it to the right person based on type, risk, and entity. Templated workflows handle the steps a lawyer used to handle manually: generating documents, gathering approvals, tracking SLAs, closing on the record.</p>
+          <ul class="cbx-rr__feature-list">
+            <li><span class="cbx-rr__check">✓</span>Structured intake from email, Slack, Teams, or web forms</li>
+            <li><span class="cbx-rr__check">✓</span>Automated routing by request type, risk, and entity</li>
+            <li><span class="cbx-rr__check">✓</span>Templated workflows for repeatable processes (NDAs, vendor risk, approvals)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5) IN PRACTICE ============ -->
+  <section class="cbx-rr__section cbx-rr__section--alt">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__section-head">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>What This Looks Like in Practice</span>
+        <h2 class="cbx-rr__h2">The repetitive work <span class="cbx-rr__hl">that disappears.</span></h2>
+        <p class="cbx-rr__section-lede">Six common request types in-house legal teams handle every week. Each one routed through deflection or automation, and off your team's plate.</p>
+      </div>
+
+      <div class="cbx-rr__req-grid">
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">📄</div>
+          <h4 class="cbx-rr__h4">NDA requests</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">"Can I sign this NDA?" forwarded to legal. 30 minutes of review per request.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">Self-service NDA generator with pre-approved templates. Zero lawyer time on standard, escalated only when non-standard.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">📢</div>
+          <h4 class="cbx-rr__h4">Marketing claim review</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">Slack DMs to general counsel, ad-hoc back and forth.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">Structured intake. AI screens for risk. Routed to legal only when threshold crossed.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">🔌</div>
+          <h4 class="cbx-rr__h4">Vendor & data sharing questions</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">"Can we use this vendor?" via email. No structured assessment.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">Self-serve vendor risk questionnaire. Auto-classified. Routed by data sensitivity tier.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">🎁</div>
+          <h4 class="cbx-rr__h4">Gift & entertainment approvals</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">Email approval chain. Inconsistent decisions. No log.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">Self-service intake. Auto-approved when under threshold. Escalated when over.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">📚</div>
+          <h4 class="cbx-rr__h4">"What's our policy on…?"</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">Same 12 questions answered repeatedly by senior counsel.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">AI legal assistant answers in Slack or Teams. Pulls from your policies. Cites sources.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cbx-rr__req-card">
+          <div class="cbx-rr__req-ico">📨</div>
+          <h4 class="cbx-rr__h4">Subpoenas & records requests</h4>
+          <div class="cbx-rr__req-flow">
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--before">Before</span>
+              <span class="cbx-rr__req-flow-text">Manual triage every time. No standard process.</span>
+            </div>
+            <div class="cbx-rr__req-flow-row">
+              <span class="cbx-rr__req-flow-label cbx-rr__req-flow-label--after">After</span>
+              <span class="cbx-rr__req-flow-text">Standardized intake workflow with jurisdiction routing, SLA, and document collection built in.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6) CAPACITY RECLAIMED (dark) ============ -->
+  <section class="cbx-rr__section cbx-rr__section--dark">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__section-head">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>Capacity Reclaimed</span>
+        <h2 class="cbx-rr__h2">The work your team <br/><span style="color: var(--cbx-green);">should have been doing all along.</span></h2>
+        <p class="cbx-rr__section-lede">When repetitive requests stop reaching your team, what's left is the work that actually requires a lawyer. Bet-the-company matters. Strategic counsel. The judgment calls only your team can make. That's the trade.</p>
+      </div>
+
+      <div class="cbx-rr__stats">
+        <div class="cbx-rr__stat">
+          <div class="cbx-rr__stat-value">~40%</div>
+          <div class="cbx-rr__stat-label">of attorney time freed</div>
+          <div class="cbx-rr__stat-foot">Reallocated to strategic matters</div>
+        </div>
+        <div class="cbx-rr__stat">
+          <div class="cbx-rr__stat-value">~70%</div>
+          <div class="cbx-rr__stat-label">of routine requests deflected</div>
+          <div class="cbx-rr__stat-foot">Resolved without lawyer touch</div>
+        </div>
+        <div class="cbx-rr__stat">
+          <div class="cbx-rr__stat-value">0</div>
+          <div class="cbx-rr__stat-label">times the same question answered twice</div>
+          <div class="cbx-rr__stat-foot">The AI assistant remembers</div>
+        </div>
+      </div>
+
+      <div class="cbx-rr__quote">
+        <blockquote class="cbx-rr__quote-text">"Email is a great tool, but email is not a system."</blockquote>
+        <div class="cbx-rr__quote-attr">Jeannine Moran · Director of Legal Operations, Hitachi Digital</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8) FAQ ============ -->
+  <section class="cbx-rr__section cbx-rr__section--alt">
+    <div class="cbx-rr__container">
+      <div class="cbx-rr__section-head">
+        <span class="cbx-rr__eyebrow"><span class="cbx-rr__eyebrow-dot"></span>Common Questions</span>
+        <h2 class="cbx-rr__h2">What in-house legal teams ask <span class="cbx-rr__hl">before they buy.</span></h2>
+      </div>
+
+      <div class="cbx-rr__faq-grid">
+        <details class="cbx-rr__faq">
+          <summary>Won't the AI assistant get it wrong?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">The assistant is grounded in your policies, playbooks, and prior answers. Not the open internet. It cites sources for every response, escalates anything outside its confidence threshold, and only handles request types your legal team has explicitly approved. Anything novel still reaches a lawyer.</div>
+        </details>
+
+        <details class="cbx-rr__faq">
+          <summary>Doesn't deflection just push work to the business?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">No. The goal is to push the answer to the business, not the work. A marketing manager who asks "can I say this?" today is already doing the work of waiting, asking, following up. Self-service gives them the answer faster, on policy, with a defensible record.</div>
+        </details>
+
+        <details class="cbx-rr__faq">
+          <summary>Our team is already busy. How long does setup take?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">First workflows typically go live within 4 to 6 weeks. Setup is configuration, not development. Your legal ops team builds with the Checkbox no-code platform. You don't need IT, and you don't need to redesign your processes before you start.</div>
+        </details>
+
+        <details class="cbx-rr__faq">
+          <summary>How is this different from a CLM?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">A CLM stores executed contracts. Checkbox handles the layer in front of it. The intake, the triage, the workflow that determines whether a contract even needs to be drafted, and what gets routed to your CLM if so. The two are complementary.</div>
+        </details>
+
+        <details class="cbx-rr__faq">
+          <summary>What happens to the requests that still need a lawyer?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">They show up in your team's queue with structured context attached. Who asked, what type, what risk tier, what SLA. Cleaner intake means faster triage and better decisions on what to prioritize.</div>
+        </details>
+
+        <details class="cbx-rr__faq">
+          <summary>How do we measure the impact?<span class="cbx-rr__faq-plus">+</span></summary>
+          <div class="cbx-rr__faq-a">Real-time dashboards show request volume by type, deflection rate, average resolution time, and attorney workload distribution. The data your team needs to report to the GC or the board on legal capacity.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9) FINAL CTA ============ -->
+  <section class="cbx-rr__section cbx-rr__section--final cbx-rr__final" id="book">
+    <div class="cbx-rr__container">
+      <h2 class="cbx-rr__h2">See where the repetitive volume actually is.</h2>
+      <p>A 30-minute call. We'll walk through the request types your team handles most, and show you which ones Checkbox can deflect or automate. No deck, no pitch. Just a working diagnostic.</p>
+      <div class="cbx-rr__cta-row" style="justify-content: center;">
+        <a href="#" class="cbx-rr__btn cbx-rr__btn--green">Book a Demo</a>
+        <a href="https://www.checkbox.ai/try-checkbox" class="cbx-rr__btn cbx-rr__btn--outline">Try Checkbox</a>
+      </div>
+      </div>
+  </section>
+
+</div>
+
+</body>
+</html>
