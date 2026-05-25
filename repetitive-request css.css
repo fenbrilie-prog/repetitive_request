@@ -218,7 +218,7 @@
      ============================================================ */
   .cbx-r__hero {
     background: var(--hero-grad);
-    padding: var(--s6) 0 var(--s8);
+   padding: 180px 0 140px;
     position: relative;
     overflow: hidden;
   }
