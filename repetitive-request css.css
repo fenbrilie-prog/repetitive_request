@@ -78,10 +78,6 @@
   .cbx-r button { font: inherit; }
   .cbx-r img, .cbx-r svg { display: block; max-width: 100%; }
 
-blockquote.cbx-r__quote {
-  padding-left: 20px !important;
-}
-
   /* ============================================================
      LAYOUT PRIMITIVES
      ============================================================ */
