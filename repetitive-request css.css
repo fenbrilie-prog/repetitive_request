@@ -140,10 +140,13 @@
     letter-spacing: -0.005em;
   }
   .cbx-r__hl {
+    display: inline !important;
     color: var(--g-dark);
     background: linear-gradient(180deg, transparent 65%, var(--g-soft) 65%);
     padding: 0 4px;
     border-radius: 3px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   /* Highlight on dark backgrounds: use brighter green text and a
