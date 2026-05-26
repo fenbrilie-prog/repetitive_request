@@ -79,7 +79,7 @@
   .cbx-r img, .cbx-r svg { display: block; max-width: 100%; }
 
 blockquote.cbx-r__quote {
-  padding-left: 20px;
+  padding-left: 20px !important;
 }
 
   /* ============================================================
