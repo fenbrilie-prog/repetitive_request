@@ -218,7 +218,7 @@
      ============================================================ */
   .cbx-r__hero {
     background: var(--hero-grad);
-   padding: 180px 0 140px !important;
+    padding: 180px 0 140px !important;
     position: relative;
     overflow: hidden;
   }
@@ -1117,7 +1117,6 @@
      DESKTOP : 960px
      ============================================================ */
   @media (min-width: 960px) {
-    .cbx-r__hero { padding: var(--s10) 0 var(--s12); }
     .cbx-r__hero-grid {
       grid-template-columns: 1.05fr 1fr;
       gap: var(--s8);
